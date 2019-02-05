@@ -1,0 +1,308 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Using parts library JSON (PLJSON) files &mdash; party 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="party 0.1.0 documentation" href="index.html"/>
+        <link rel="prev" title="Assembling the parts library JSON (PLJSON) files" href="assembling_pljson.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> party
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="part_libraries.html">Part libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="party_presentation.html">party</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pljson_file_format.html">Parts libraries JSON format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembling_pljson.html">Assembling the parts library JSON (PLJSON) files</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Using parts library JSON (PLJSON) files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#create-library-cad-files">Create library CAD files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#formats">Formats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#create-the-library-documentation">Create the library documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Formats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#use-the-parts-in-other-projects">Use the parts in other projects</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">party</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Using parts library JSON (PLJSON) files</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/using_pljson.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="using-parts-library-json-pljson-files">
+<span id="using-pljson-label"></span><h1>Using parts library JSON (PLJSON) files<a class="headerlink" href="#using-parts-library-json-pljson-files" title="Permalink to this headline">¶</a></h1>
+<p>Now that we have a proper PLJSON file, what can we do with it?</p>
+<div class="section" id="create-library-cad-files">
+<h2>Create library CAD files<a class="headerlink" href="#create-library-cad-files" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="party.html#party.library_use.generate" title="party.library_use.generate"><code class="xref py py-func docutils literal"><span class="pre">generate()</span></code></a> function of the <a class="reference internal" href="party.html#module-party.library_use" title="party.library_use"><code class="xref py py-mod docutils literal"><span class="pre">party.library_use</span></code></a>
+module will create <a class="reference external" href="https://github.com/guillaume-florent/ccad">ccad</a> scripts and CAD files
+(depending on the optional arguments values) in subfolders of
+the folder containing the parts library JSON (PLJSON) file.</p>
+<div class="section" id="formats">
+<h3>Formats<a class="headerlink" href="#formats" title="Permalink to this headline">¶</a></h3>
+<p>From the parts library JSON (PLJSON) file, it is possible to create one CAD file
+per entry in the <strong>data</strong> section of the PLJSON file in the following formats:</p>
+<ul class="simple">
+<li>STEP (AP203)</li>
+<li>STL</li>
+<li>HTML (to view the part in the browser using X3DOM)</li>
+</ul>
+</div>
+<div class="section" id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<p>See the <code class="xref py py-mod docutils literal"><span class="pre">examples/ISO_4014/use_library_json.py</span></code> script for an example of
+how to generate the CAD files from the parts library (PLJSON) file.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1"># coding: utf-8</span>
+
+<span class="sd">r&quot;&quot;&quot;Example use of the library.json file to create geometry_scripts and</span>
+<span class="sd">cad files</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span><span class="p">,</span> <span class="n">dirname</span>
+
+<span class="kn">from</span> <span class="nn">party.library_use</span> <span class="kn">import</span> <span class="n">generate</span>
+
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span>
+                    <span class="n">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> :: </span><span class="si">%(levelname)6s</span><span class="s1"> :: &#39;</span>
+                           <span class="s1">&#39;</span><span class="si">%(module)20s</span><span class="s1"> :: </span><span class="si">%(lineno)3d</span><span class="s1"> :: </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">generate</span><span class="p">(</span><span class="n">json_library_filepath</span><span class="o">=</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s2">&quot;library.json&quot;</span><span class="p">),</span>
+         <span class="n">generate_steps</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">generate_stls</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">generate_htmls</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="create-the-library-documentation">
+<h2>Create the library documentation<a class="headerlink" href="#create-the-library-documentation" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="party.html#party.library_documentation.create_libraries_sphinx_sources" title="party.library_documentation.create_libraries_sphinx_sources"><code class="xref py py-func docutils literal"><span class="pre">generate()</span></code></a> function of the <a class="reference internal" href="party.html#module-party.library_documentation" title="party.library_documentation"><code class="xref py py-mod docutils literal"><span class="pre">party.library_documentation</span></code></a>
+module will create HTML documentation of the parts library JSON (PLJSON) file in the folder passed as a parameter.</p>
+<div class="section" id="id1">
+<h3>Formats<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Currently, only HTML documentation generation is implemented.</p>
+</div>
+<div class="section" id="id2">
+<h3>Example<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>See the <code class="xref py py-mod docutils literal"><span class="pre">examples/create_documentation_example.py</span></code> script for an example of
+how to generate the documentation of the parts library (PLJSON) file.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1"># coding: utf-8</span>
+
+<span class="sd">r&quot;&quot;&quot;Parts library documentation creation example&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">join</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">party.library_documentation</span> <span class="kn">import</span> <span class="n">create_libraries_sphinx_sources</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">r&quot;&quot;&quot;Main function for the parts library documentation example&quot;&quot;&quot;</span>
+    <span class="n">create_libraries_sphinx_sources</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s2">&quot;../examples&quot;</span><span class="p">),</span>
+                                    <span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s2">&quot;../examples/doc&quot;</span><span class="p">))</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span>
+                        <span class="n">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> :: </span><span class="si">%(levelname)6s</span><span class="s1"> :: &#39;</span>
+                               <span class="s1">&#39;</span><span class="si">%(module)20s</span><span class="s1"> :: </span><span class="si">%(lineno)3d</span><span class="s1"> :: </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="use-the-parts-in-other-projects">
+<h2>Use the parts in other projects<a class="headerlink" href="#use-the-parts-in-other-projects" title="Permalink to this headline">¶</a></h2>
+<p>Work in progress to use the parts library JSON (PLJSON) files in:</p>
+<ul class="simple">
+<li>a new (in development) CAD project definition structure based on acyclic directed graphs.</li>
+<li>other CAD softwares that offer scripting/plugin capabilities</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="assembling_pljson.html" class="btn btn-neutral" title="Assembling the parts library JSON (PLJSON) files" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Guillaume Florent, Thomas Paviot, Bernard Uguen.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

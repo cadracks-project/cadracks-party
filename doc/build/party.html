@@ -1,0 +1,587 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>party package &mdash; party 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="party 0.1.0 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> party
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="part_libraries.html">Part libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="party_presentation.html">party</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pljson_file_format.html">Parts libraries JSON format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembling_pljson.html">Assembling the parts library JSON (PLJSON) files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_pljson.html">Using parts library JSON (PLJSON) files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">party</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>party package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/party.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="party-package">
+<h1>party package<a class="headerlink" href="#party-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-party.library_checking">
+<span id="party-library-checking-module"></span><h2>party.library_checking module<a class="headerlink" href="#module-party.library_checking" title="Permalink to this headline">¶</a></h2>
+<p>Parts library checks</p>
+<dl class="function">
+<dt id="party.library_checking.check_all">
+<code class="descclassname">party.library_checking.</code><code class="descname">check_all</code><span class="sig-paren">(</span><em>json_filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/library_checking.html#check_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.library_checking.check_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform every possible test on the library</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>json_filename</strong> (<em>str</em>) &#8211; Path to the JSON file that describes the parts library</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">bool : True if the library is OK, False otherwise
+errors : dict (keys: part_identifier, values: list of broken rules)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple(bool, errors)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="party.library_checking.check_library_fields">
+<code class="descclassname">party.library_checking.</code><code class="descname">check_library_fields</code><span class="sig-paren">(</span><em>json_filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/library_checking.html#check_library_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.library_checking.check_library_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that every entry in the &#8216;data&#8217; section if the library JSON
+file has the same fields (order does not matter)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>json_filename</strong> (<em>str</em>) &#8211; Path to the JSON file that describes the parts library</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">bool : True if the library is OK, False otherwise
+errors : dict (keys: part_identifier, values: list of broken rules)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple(bool, errors)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="party.library_checking.check_library_json_rules">
+<code class="descclassname">party.library_checking.</code><code class="descname">check_library_json_rules</code><span class="sig-paren">(</span><em>json_filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/library_checking.html#check_library_json_rules"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.library_checking.check_library_json_rules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that the entries in the &#8216;data&#8217; field of a library respect the
+rules defined in the &#8216;rules&#8217; field of the library</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>json_filename</strong> (<em>str</em>) &#8211; Path to the JSON file that describes the parts library</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">bool : True if the library is OK, False otherwise
+errors : dict (keys: part_identifier, values: list of broken rules)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">tuple(bool, errors)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>NameError if the rules definition contain wrong identifiers</strong></li>
+<li><strong>SyntaxError if there is a syntax error in the rules definition</strong></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="party.library_checking.check_library_units_definition">
+<code class="descclassname">party.library_checking.</code><code class="descname">check_library_units_definition</code><span class="sig-paren">(</span><em>json_filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/library_checking.html#check_library_units_definition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.library_checking.check_library_units_definition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test that each field of a data entry is referenced in the &#8216;units&#8217;
+section of the library.json file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>json_filename</strong> (<em>str</em>) &#8211; Path to the JSON file that describes the parts library</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">bool : True if the library is OK, False otherwise
+errors : dict (keys: part_identifier, values: list of broken rules)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple(bool, errors)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-party.library_creation">
+<span id="party-library-creation-module"></span><h2>party.library_creation module<a class="headerlink" href="#module-party.library_creation" title="Permalink to this headline">¶</a></h2>
+<p>The library_creation.py module contains standard mechanisms to create a
+library.json file from standard templates</p>
+<p>Currently implemented:</p>
+<ul class="simple">
+<li>alias mechanism : replace aliases by the values they refer to</li>
+<li>generator code : replace the {{ generators }} tag in the template by the code</li>
+</ul>
+<p>found in the generators subdirectory</p>
+<p>Every function has a file_in and a file_out parameter that can be used by
+the specific library.json creation routines as required</p>
+<dl class="function">
+<dt id="party.library_creation.autocreate_library">
+<code class="descclassname">party.library_creation.</code><code class="descname">autocreate_library</code><span class="sig-paren">(</span><em>template_file</em>, <em>library_file_name='library.json'</em>, <em>delete_intermediate=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/library_creation.html#autocreate_library"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.library_creation.autocreate_library" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automated parts library creation from a template file. The template
+processing is automated depending on the presence of certain features in
+the template</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>template_file</strong> (<em>str</em>) &#8211; Path to the template file</li>
+<li><strong>library_file_name</strong> (<em>str, optional (default is &#8216;library.json&#8217;)</em>) &#8211; Name of the final library file</li>
+<li><strong>delete_intermediate</strong> (<em>bool, optional (default is True)</em>) &#8211; Should the intermediate files for library creation be deleted</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="party.library_creation.create_skeleton">
+<code class="descclassname">party.library_creation.</code><code class="descname">create_skeleton</code><span class="sig-paren">(</span><em>base_folder</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/library_creation.html#create_skeleton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.library_creation.create_skeleton" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a skeleton for a parts library project</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>base_folder</strong> (<em>str</em>) &#8211; The path to the base folder of the library</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="party.library_creation.has_aliases">
+<code class="descclassname">party.library_creation.</code><code class="descname">has_aliases</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/library_creation.html#has_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.library_creation.has_aliases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a dictionnary has values with the __alias__ string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>d</strong> (<em>dict</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="party.library_creation.template_handle_aliases">
+<code class="descclassname">party.library_creation.</code><code class="descname">template_handle_aliases</code><span class="sig-paren">(</span><em>file_in</em>, <em>file_out</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/library_creation.html#template_handle_aliases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.library_creation.template_handle_aliases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace aliases found in a template file by the values they refer to</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file_in</strong> (<em>str</em>) &#8211; Path to the input file (i.e. a template using aliases)</li>
+<li><strong>file_out</strong> (<em>str</em>) &#8211; The output file
+(i.e. a template with replaced aliases or the final file)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="party.library_creation.template_handle_generators">
+<code class="descclassname">party.library_creation.</code><code class="descname">template_handle_generators</code><span class="sig-paren">(</span><em>file_in</em>, <em>file_out</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/library_creation.html#template_handle_generators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.library_creation.template_handle_generators" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Replace the {{ generators }} tag by geometry generation code using</dt>
+<dd>Python generator files in the generators subdirectory</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file_in</strong> (<em>str</em>) &#8211; Path to the input file
+(i.e. a template containing a {{ generators )} tag)</li>
+<li><strong>file_out</strong> (<em>str</em>) &#8211; The output file
+(i.e. a template with replaced {{ generators }} tag or the final file)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="party.library_creation.template_handle_includes">
+<code class="descclassname">party.library_creation.</code><code class="descname">template_handle_includes</code><span class="sig-paren">(</span><em>file_in</em>, <em>file_out</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/library_creation.html#template_handle_includes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.library_creation.template_handle_includes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace includes found in a template file by the values they refer to</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file_in</strong> (<em>str</em>) &#8211; Path to the input file (i.e. a template using includes)</li>
+<li><strong>file_out</strong> (<em>str</em>) &#8211; The output file
+(i.e. a template with replaced includes or the final file)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="party.library_creation.template_handle_nomenclature">
+<code class="descclassname">party.library_creation.</code><code class="descname">template_handle_nomenclature</code><span class="sig-paren">(</span><em>file_in</em>, <em>file_out</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/library_creation.html#template_handle_nomenclature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.library_creation.template_handle_nomenclature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces the part_ids by the nomenclature computed id</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file_in</strong> (<em>str</em>) &#8211; Path to the input file
+(i.e. a template containing a {{ generators )} tag)</li>
+<li><strong>file_out</strong> (<em>str</em>) &#8211; The output file
+(i.e. a template with replaced {{ generators }} tag or the final file)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-party.library_documentation">
+<span id="party-library-documentation-module"></span><h2>party.library_documentation module<a class="headerlink" href="#module-party.library_documentation" title="Permalink to this headline">¶</a></h2>
+<p>library_documentation.py module</p>
+<p>Generate the documentation for a parts library JSON file</p>
+<dl class="function">
+<dt id="party.library_documentation.create_libraries_sphinx_sources">
+<code class="descclassname">party.library_documentation.</code><code class="descname">create_libraries_sphinx_sources</code><span class="sig-paren">(</span><em>libraries_root_folder</em>, <em>doc_folder</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/library_documentation.html#create_libraries_sphinx_sources"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.library_documentation.create_libraries_sphinx_sources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the sphinx files that are common to all libraries</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>libraries_root_folder</strong> (<em>str</em>) &#8211; Path to the root folder of libraries</li>
+<li><strong>doc_folder</strong> (<em>str</em>) &#8211; Path to the folder where the documentation should be generated</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-party.library_use">
+<span id="party-library-use-module"></span><h2>party.library_use module<a class="headerlink" href="#module-party.library_use" title="Permalink to this headline">¶</a></h2>
+<p>Unique geometry script generation logic from a JSON parts library file</p>
+<dl class="function">
+<dt id="party.library_use.generate">
+<code class="descclassname">party.library_use.</code><code class="descname">generate</code><span class="sig-paren">(</span><em>json_library_filepath</em>, <em>generate_steps=False</em>, <em>generate_stls=False</em>, <em>generate_htmls=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/library_use.html#generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.library_use.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a geometry generation script for each part defined
+in the JSON file passed as a parameter</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>json_library_filepath</strong> (<em>str</em>) &#8211; The path to the JSON file describing the parts library</li>
+<li><strong>generate_steps</strong> (<em>bool</em>) &#8211; </li>
+<li><strong>generate_stls</strong> (<em>bool</em>) &#8211; </li>
+<li><strong>generate_htmls</strong> (<em>bool</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">KeyError</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="party.library_use.generate_all">
+<code class="descclassname">party.library_use.</code><code class="descname">generate_all</code><span class="sig-paren">(</span><em>base_folder</em>, <em>preview=False</em>, <em>generate_steps=False</em>, <em>generate_stls=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/library_use.html#generate_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.library_use.generate_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each folder containing a JSON parts library definition:
+- check the JSON file is OK
+- if so, generate the geometry scripts</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>base_folder</strong> (<em>str</em>) &#8211; The root folder from which to generate</li>
+<li><strong>preview</strong> (<em>bool</em>) &#8211; If True, do everything but creating the geometry scripts
+If False, also generate the geometry scripts</li>
+<li><strong>generate_steps</strong> (<em>bool</em>) &#8211; </li>
+<li><strong>generate_stls</strong> (<em>bool</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="party-scripts-checking-module">
+<h2>party.scripts_checking module<a class="headerlink" href="#party-scripts-checking-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-party.templating">
+<span id="party-templating-module"></span><h2>party.templating module<a class="headerlink" href="#module-party.templating" title="Permalink to this headline">¶</a></h2>
+<p>Functions for templates handling</p>
+<dl class="function">
+<dt id="party.templating.reconstruct_script_code_template">
+<code class="descclassname">party.templating.</code><code class="descname">reconstruct_script_code_template</code><span class="sig-paren">(</span><em>generator_code</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/templating.html#reconstruct_script_code_template"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.templating.reconstruct_script_code_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reconstruct a valid Python code from the generator code stored in the
+JSON library definition file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>generator_code</strong> (<em>list</em>) &#8211; List of ccad python instructions (containing Jinja placeholders)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><strong>str</strong> (<em>the reconstructed code, including import</em>)</li>
+<li><em>and an if __name__ == &#8216;__main__&#8217; idiom</em></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="party.templating.render">
+<code class="descclassname">party.templating.</code><code class="descname">render</code><span class="sig-paren">(</span><em>template_path</em>, <em>context</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/templating.html#render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.templating.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render a template using a context</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>template_path</strong> (<em>str</em>) &#8211; Full path to a template</li>
+<li><strong>context</strong> (<em>dict</em>) &#8211; Dict used for template rendering</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">The template rendered with the context</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="party.templating.to_json_string">
+<code class="descclassname">party.templating.</code><code class="descname">to_json_string</code><span class="sig-paren">(</span><em>generators_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/party/templating.html#to_json_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#party.templating.to_json_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform a dictionnary of generators (key = file name no extension;
+value = file content) to a json string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>generators_dict</strong> (<em>dict</em>) &#8211; Dictionnary of generators. The key is the file name without the
+extension; the value is the generator file content</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>str</strong> &#8211;
+library_template.json</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">the json string that will replace the {{ generators }} tag in</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-party">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-party" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Guillaume Florent, Thomas Paviot, Bernard Uguen.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

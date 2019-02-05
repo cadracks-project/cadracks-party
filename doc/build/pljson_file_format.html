@@ -1,0 +1,428 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Parts libraries JSON format &mdash; party 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="party 0.1.0 documentation" href="index.html"/>
+        <link rel="next" title="Assembling the parts library JSON (PLJSON) files" href="assembling_pljson.html"/>
+        <link rel="prev" title="party" href="party_presentation.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> party
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="part_libraries.html">Part libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="party_presentation.html">party</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Parts libraries JSON format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-metadata-section">The metadata section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-generators-section">The generators section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-rules-section">The rules section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-data-section">The data section</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="assembling_pljson.html">Assembling the parts library JSON (PLJSON) files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_pljson.html">Using parts library JSON (PLJSON) files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">party</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Parts libraries JSON format</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/pljson_file_format.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="parts-libraries-json-format">
+<span id="pljson-file-format-label"></span><h1>Parts libraries JSON format<a class="headerlink" href="#parts-libraries-json-format" title="Permalink to this headline">¶</a></h1>
+<p>We must distinguish:</p>
+<ul class="simple">
+<li>the final parts library JSON files, that are to be publicly released for use in open hardware projects (PLJSON)</li>
+<li>the &#8216;template&#8217; files (T-PLJSON) that are used to create PLJSON files. These &#8216;template&#8217; files are only precursors for the PLJSON files.</li>
+</ul>
+<p>The &#8216;template&#8217; T-PLJSON files (see <a class="reference internal" href="assembling_pljson.html#assembling-pljson-label"><span>Assembling the parts library JSON (PLJSON) files</span></a>) are used to make maintenance easier by:</p>
+<ul class="simple">
+<li>avoiding duplicated information</li>
+<li>allowing to keep the geometry and anchors creation logic in a separate Python file (more readable and easier to debug)</li>
+</ul>
+<p>This paragraph describes the PLJSON file format.</p>
+<div class="section" id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<p>A PLJSON file is made of 4 sections:</p>
+<ul class="simple">
+<li>the <strong>metadata</strong> section;</li>
+<li>the <strong>generators</strong> section;</li>
+<li>the <strong>rules</strong> section;</li>
+<li>the <strong>data</strong> section.</li>
+</ul>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;metadata&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;generators&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;rules&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-metadata-section">
+<h2>The metadata section<a class="headerlink" href="#the-metadata-section" title="Permalink to this headline">¶</a></h2>
+<p>The metadata section must contain the following entries:</p>
+<ul class="simple">
+<li><strong>name</strong> : the name of the parts library, without spaces (i.e. &#8216;iso4014-screws-library&#8217; is ok, &#8216;iso4014 screws library&#8217; is not). The characters used must be valid file name characters for the OS.</li>
+<li><strong>description</strong> : a plain text description of the library. Spaces, punctuation marks and special characters (outside of JSON specific characters) are allowed.</li>
+<li><strong>units</strong> : for each type of unit, the unit and the variables in that unit are defined:</li>
+</ul>
+<p>For example:</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span>{
+  &quot;metadata&quot;: {
+    &quot;units&quot;: {
+      &quot;length&quot;: [&quot;mm&quot;, [&quot;p&quot;, &quot;b_ref_b&quot;, &quot;b_ref_c&quot;, &quot;b_ref_d&quot;, &quot;c_max&quot;....]],
+      &quot;force&quot;: [&quot;N&quot;, []],
+      &quot;weight&quot;: [&quot;g&quot;, []],
+      &quot;dimensionless&quot;: [&quot;&quot;, [&quot;threading&quot;, &quot;generics&quot;, &quot;grade_specifics&quot;]]
+    },
+  ....
+  }
+}
+</pre></div>
+</div>
+<p>defines &#8216;p&#8217; as a length in mm (millimeters). &#8216;threading&#8217; is data without a dimension nor a unit. A forces would be in newtons if one was defined, but none is.</p>
+<ul class="simple">
+<li><strong>authors</strong> defines the list of library authors.</li>
+</ul>
+<div class="highlight-json"><div class="highlight"><pre><span></span>{
+  &quot;metadata&quot;: {
+    ...
+    &quot;authors&quot;: [&quot;Guillaume Florent&quot;, &quot;Thomas Paviot&quot;, &quot;Bernard Uguen&quot;],
+    ...
+  }
+}
+</pre></div>
+</div>
+<ul class="simple">
+<li><strong>url</strong> : url is the well ... the url from which the file was downloaded</li>
+<li><strong>license</strong> : license is the short name of the license of the library (e.g. GPLv3)</li>
+</ul>
+<p>The metadata section may contain the following entries:</p>
+<ul class="simple">
+<li><strong>nomenclature</strong> : the naming convention for the parts defined in the <strong>data</strong> section. The naming convention is defined as a Python expression that evaluates to a string.</li>
+</ul>
+<p>For example (threading and l_max are parts data definition identifiers):</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span>{
+  &quot;metadata&quot;: {
+    ...
+    &quot;nomenclature&quot;: &quot;&#39;ISO4014_&#39; + threading + &#39;x&#39; + str(int(l_max))&quot;,
+    ...
+    }
+    ...
+}
+</pre></div>
+</div>
+<p>The nomenclature can be used to check that every entry in the <strong>data</strong> section has an id that respects the nomenclature.</p>
+</div>
+<div class="section" id="the-generators-section">
+<h2>The generators section<a class="headerlink" href="#the-generators-section" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>generators</strong> section contains one entry per potential geometry and anchors generator (every entry in the
+data section is linked to a generator by its &#8216;generator&#8217; field).</p>
+<p>The value of each entry is a list a Python instructions using the <a class="reference external" href="https://github.com/guillaume-florent/ccad">ccad</a> package. Library creators are not expected to
+directly write the Python instructions in the PLJSON file. Instead, the templates mechanism allows including a Python script in the final PLJSON file)</p>
+<p>Here is an example generators section:</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span>{
+  ...
+  &quot;generators&quot;: {
+    &quot;iso4014_screw&quot;: [
+      &quot;r&#39;&#39;&#39;Generation script for ISO 4014 screw&#39;&#39;&#39;&quot;,
+      &quot;&quot;,
+      &quot;from ccad.model import prism, filling, ngon, cylinder, translated&quot;,
+      &quot;&quot;,
+      &quot;k_max = {{ k_max }}&quot;,
+      &quot;s_max = {{ s_max }}&quot;,
+      &quot;l_g_max = {{ l_g_max }}&quot;,
+      &quot;d_s_max = {{ d_s_max }}&quot;,
+      &quot;d_s_min = {{ d_s_min }}&quot;,
+      &quot;l_max = {{ l_max }}&quot;,
+      &quot;&quot;,
+      &quot;head = translated(prism(filling(ngon(2 / 3**.5 * s_max / 2., 6)), (0, 0, k_max)), (0., 0., -k_max))&quot;,
+      &quot;&quot;,
+      &quot;threaded = cylinder(d_s_min / 2., l_max)&quot;,
+      &quot;unthreaded = cylinder(d_s_max / 2., l_g_max)&quot;,
+      &quot;&quot;,
+      &quot;part = head + threaded + unthreaded&quot;,
+      &quot;anchors = {1: {&#39;position&#39;: (0., 0., 0.),&quot;,
+      &quot;               &#39;direction&#39;: (0., 0., -1.),&quot;,
+      &quot;               &#39;dimension&#39;: d_s_max,&quot;,
+      &quot;               &#39;description&#39;: &#39;screw head on plane&#39;}}&quot;
+    ]
+  },
+...
+}
+</pre></div>
+</div>
+<p>Values in double curly bracket (e.g. {{ k_max }}) are placeholders for the values defined in each entry of the <strong>data</strong> section.</p>
+</div>
+<div class="section" id="the-rules-section">
+<h2>The rules section<a class="headerlink" href="#the-rules-section" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>rules</strong> section contain a list of Python expressions that must all evaluate to True for
+each entry of the <strong>data</strong> section  for the PLJSON file to be considered correct.</p>
+<p>Here is an example <strong>rules</strong> section:</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span>{
+  ...
+  &quot;rules&quot;: [&quot;c_max &gt; c_min&quot;, &quot;d_a_max &gt; d_a_min&quot;, &quot;m_max &gt; m_min&quot;, &quot;s_max &gt; s_min&quot;],
+  ...
+}
+</pre></div>
+</div>
+<p>The first rule in this example states that c_max must be strictly superior to c_min in each entry of the <strong>data</strong> section.</p>
+<p>Any Python expression that evaluates to a boolean can be used.</p>
+</div>
+<div class="section" id="the-data-section">
+<h2>The data section<a class="headerlink" href="#the-data-section" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>data</strong> section defines the possible values for each part contained in the parts library.</p>
+<p>Every entry must contain the same set of fields. If this is not possible, another parts library must be created.</p>
+<p>2 fields are compulsory : &#8216;generator&#8217; (and its value must be in the ids defined in the <strong>generators</strong> section) and description.</p>
+<p>The other fields are application/standard dependant.</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span>{
+  ...
+  &quot;data&quot;: {
+    &quot;ISO4014_M1.6_grade_Ax12&quot;: {
+      &quot;description&quot;: &quot;M1.6 ISO 4014 screw, 12 mm, grade A&quot;,
+      &quot;generator&quot;: &quot;iso4014_screw&quot;,
+      &quot;l_min&quot;: 11.65,
+      &quot;l_max&quot;: 12.35,
+      &quot;l_s_min&quot;: 1.2,
+      &quot;l_g_max&quot;: 3.0,
+      &quot;threading&quot;: &quot;M1.6_grade_A&quot;,
+      &quot;generics&quot;: &quot;M1.6_generics&quot;,
+      &quot;grade_specifics&quot;: &quot;M1.6_grade_A_specifics&quot;,
+      &quot;p&quot;: 0.35,
+      &quot;b_ref_b&quot;: 9.0,
+      &quot;b_ref_c&quot;: 15.0,
+      &quot;b_ref_d&quot;: 28.0,
+      &quot;c_max&quot;: 0.25,
+      &quot;c_min&quot;: 0.1,
+      &quot;d_a&quot;: 2.0,
+      &quot;d_s_max&quot;: 1.6,
+      &quot;l_f_max&quot;: 0.6,
+      &quot;k_nominal&quot;: 1.1,
+      &quot;r_min&quot;: 0.1,
+      &quot;s_max&quot;: 3.2,
+      &quot;d_s_min&quot;: 1.46,
+      &quot;d_w_min&quot;: 2.27,
+      &quot;e&quot;: 3.41,
+      &quot;k_max&quot;: 1.225,
+      &quot;k_min&quot;: 0.975,
+      &quot;k_w_e_min&quot;: 0.68,
+      &quot;s_min&quot;: 3.02
+    },
+    &quot;ISO4014_M1.6_grade_Ax16&quot;: {
+      &quot;description&quot;: &quot;M1.6 ISO 4014 screw, 16 mm, grade A&quot;,
+      &quot;generator&quot;: &quot;iso4014_screw&quot;,
+      &quot;l_min&quot;: 15.65,
+      &quot;l_max&quot;: 16.35,
+      &quot;l_s_min&quot;: 5.2,
+      &quot;l_g_max&quot;: 7.0,
+      &quot;threading&quot;: &quot;M1.6_grade_A&quot;,
+      &quot;generics&quot;: &quot;M1.6_generics&quot;,
+      &quot;grade_specifics&quot;: &quot;M1.6_grade_A_specifics&quot;,
+      &quot;p&quot;: 0.35,
+      &quot;b_ref_b&quot;: 9.0,
+      &quot;b_ref_c&quot;: 15.0,
+      &quot;b_ref_d&quot;: 28.0,
+      &quot;c_max&quot;: 0.25,
+      &quot;c_min&quot;: 0.1,
+      &quot;d_a&quot;: 2.0,
+      &quot;d_s_max&quot;: 1.6,
+      &quot;l_f_max&quot;: 0.6,
+      &quot;k_nominal&quot;: 1.1,
+      &quot;r_min&quot;: 0.1,
+      &quot;s_max&quot;: 3.2,
+      &quot;d_s_min&quot;: 1.46,
+      &quot;d_w_min&quot;: 2.27,
+      &quot;e&quot;: 3.41,
+      &quot;k_max&quot;: 1.225,
+      &quot;k_min&quot;: 0.975,
+      &quot;k_w_e_min&quot;: 0.68,
+      &quot;s_min&quot;: 3.02
+    },
+    ...
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="assembling_pljson.html" class="btn btn-neutral float-right" title="Assembling the parts library JSON (PLJSON) files" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="party_presentation.html" class="btn btn-neutral" title="party" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Guillaume Florent, Thomas Paviot, Bernard Uguen.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

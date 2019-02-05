@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>party.library_documentation &mdash; party 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="party 0.1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> party
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../part_libraries.html">Part libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../party_presentation.html">party</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pljson_file_format.html">Parts libraries JSON format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../assembling_pljson.html">Assembling the parts library JSON (PLJSON) files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../using_pljson.html">Using parts library JSON (PLJSON) files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">party</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>party.library_documentation</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for party.library_documentation</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1"># coding: utf-8</span>
+
+<span class="sd">r&quot;&quot;&quot;library_documentation.py module</span>
+
+<span class="sd">Generate the documentation for a parts library JSON file</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">mkdir</span><span class="p">,</span> <span class="n">getcwd</span><span class="p">,</span> <span class="n">chdir</span><span class="p">,</span> <span class="n">walk</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">isdir</span><span class="p">,</span> <span class="n">join</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">call</span>
+
+<span class="kn">from</span> <span class="nn">party.library_checking</span> <span class="kn">import</span> <span class="n">check_library_fields</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_create_folder</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Create the folder if it does not exist</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    folder_path : str</span>
+<span class="sd">        Path to the folder to create</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">isdir</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
+        <span class="n">mkdir</span><span class="p">(</span><span class="n">folder_path</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_library_rst</span><span class="p">(</span><span class="n">library_json_filepath</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Create the rst string for a parts library</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    library_json_filepath : str</span>
+<span class="sd">        The path to the parts library</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str : rst string for library documentation</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rst_lines</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="n">ok</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">reference_set_of_fields</span> <span class="o">=</span> \
+        <span class="n">check_library_fields</span><span class="p">(</span><span class="n">library_json_filepath</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">ok</span> <span class="ow">is</span> <span class="bp">True</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;fields are : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">reference_set_of_fields</span><span class="p">))</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">library_json_filepath</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+        <span class="n">json_file_content</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+
+    <span class="n">rst_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json_file_content</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+    <span class="n">rst_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">json_file_content</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]))</span>
+    <span class="n">rst_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">max_lengths</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">max_lengths</span><span class="p">[</span><span class="s1">&#39;part_id&#39;</span><span class="p">]</span> <span class="o">=</span> \
+        <span class="nb">max</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">part_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">part_id</span> <span class="ow">in</span> <span class="n">json_file_content</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
+
+    <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">reference_set_of_fields</span><span class="p">:</span>
+        <span class="n">lengths_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="n">field_name</span><span class="p">]))</span>
+                        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">json_file_content</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+        <span class="n">lengths_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">field_name</span><span class="p">))</span>
+        <span class="n">max_lengths</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">lengths_list</span><span class="p">)</span>
+
+    <span class="n">header_fields</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">reference_set_of_fields</span><span class="p">)[:]</span>
+    <span class="n">header_fields</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;part_id&quot;</span><span class="p">)</span>
+
+    <span class="n">line_1</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="p">(</span><span class="n">max_lengths</span><span class="p">[</span><span class="n">field</span><span class="p">])</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">header_fields</span><span class="p">])</span>
+    <span class="n">line_2</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">field</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="n">max_lengths</span><span class="p">[</span><span class="n">field</span><span class="p">])</span>
+                       <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">header_fields</span><span class="p">])</span>
+    <span class="n">line_3</span> <span class="o">=</span> <span class="n">line_1</span>
+    <span class="n">last_line</span> <span class="o">=</span> <span class="n">line_1</span>
+
+    <span class="n">rst_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line_1</span><span class="p">)</span>
+    <span class="n">rst_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line_2</span><span class="p">)</span>
+    <span class="n">rst_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line_3</span><span class="p">)</span>
+
+    <span class="c1"># # Iterate on the parts found in the library JSON file</span>
+    <span class="c1"># # to fill the table</span>
+    <span class="k">for</span> <span class="n">part_id</span><span class="p">,</span> <span class="n">part_values</span> <span class="ow">in</span> <span class="n">json_file_content</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">part_id</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="n">max_lengths</span><span class="p">[</span><span class="s2">&quot;part_id&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">reference_set_of_fields</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">part_values</span><span class="p">[</span><span class="n">field</span><span class="p">])</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="n">max_lengths</span><span class="p">[</span><span class="n">field</span><span class="p">])</span>
+            <span class="n">line</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
+        <span class="n">rst_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+    <span class="n">rst_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">last_line</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rst_lines</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="create_libraries_sphinx_sources"><a class="viewcode-back" href="../../party.html#party.library_documentation.create_libraries_sphinx_sources">[docs]</a><span class="k">def</span> <span class="nf">create_libraries_sphinx_sources</span><span class="p">(</span><span class="n">libraries_root_folder</span><span class="p">,</span> <span class="n">doc_folder</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Create the sphinx files that are common to all libraries</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    libraries_root_folder : str</span>
+<span class="sd">        Path to the root folder of libraries</span>
+<span class="sd">    doc_folder : str</span>
+<span class="sd">        Path to the folder where the documentation should be generated</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">folders</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">join</span><span class="p">(</span><span class="n">doc_folder</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;source_static&quot;</span><span class="p">:</span> <span class="n">join</span><span class="p">(</span><span class="n">doc_folder</span><span class="p">,</span> <span class="s2">&quot;source/_static&quot;</span><span class="p">),</span>
+        <span class="c1"># &quot;source_templates&quot;: join(doc_folder, &quot;source/_templates&quot;),</span>
+        <span class="s2">&quot;build&quot;</span><span class="p">:</span> <span class="n">join</span><span class="p">(</span><span class="n">doc_folder</span><span class="p">,</span> <span class="s2">&quot;build&quot;</span><span class="p">)}</span>
+
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">folders</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">_create_folder</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="c1"># create the conf.py file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">folders</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">],</span> <span class="s2">&quot;conf.py&quot;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">conf</span><span class="p">:</span>
+        <span class="n">conf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">CONF_PY</span><span class="p">)</span>
+
+    <span class="c1"># create the index.rst file</span>
+    <span class="c1"># there will be one index.rst file even if there are many libraries</span>
+    <span class="c1"># documented</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">folders</span><span class="p">[</span><span class="s2">&quot;source_static&quot;</span><span class="p">],</span> <span class="s2">&quot;index.rst&quot;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">index</span><span class="p">:</span>
+        <span class="n">index</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">INDEX_HEADER</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">walk</span><span class="p">(</span><span class="n">libraries_root_folder</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Handling </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
+
+            <span class="c1"># it is considered a library if it ends with library.json</span>
+            <span class="n">libraries</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;library.json&#39;</span><span class="p">)]</span>
+
+            <span class="c1"># There should be one and only one library in a given folder</span>
+            <span class="c1"># TODO : the above assertion is wrong</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">libraries</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;There is 1 library in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found library </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">libraries</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+                <span class="c1"># read the library JSON file</span>
+                <span class="n">json_filename</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">libraries</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+                    <span class="n">json_file_content</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+                <span class="c1">#</span>
+                <span class="c1">#     # write to library rst file</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">folders</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">],</span>
+                               <span class="n">json_file_content</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">+</span>
+                                       <span class="s1">&#39;.rst&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">library_rst_file</span><span class="p">:</span>
+                    <span class="n">library_rst_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">_library_rst</span><span class="p">(</span><span class="n">json_filename</span><span class="p">))</span>
+
+                    <span class="n">index</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;   &quot;</span> <span class="o">+</span> <span class="n">json_file_content</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">+</span>
+                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">index</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">INDEX_FOOTER</span><span class="p">)</span>
+
+    <span class="c1"># Run sphinx</span>
+    <span class="n">cwd</span> <span class="o">=</span> <span class="n">getcwd</span><span class="p">()</span>
+    <span class="n">chdir</span><span class="p">(</span><span class="n">folders</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">])</span>
+    <span class="n">call</span><span class="p">([</span><span class="s2">&quot;ls&quot;</span><span class="p">,</span> <span class="s2">&quot;-l&quot;</span><span class="p">])</span>
+    <span class="n">call</span><span class="p">(</span><span class="s2">&quot;sphinx-build -b html </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">folders</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">],</span> <span class="n">folders</span><span class="p">[</span><span class="s2">&quot;build&quot;</span><span class="p">]))</span>
+    <span class="n">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span>
+</div>
+<span class="n">CONF_PY</span> <span class="o">=</span> <span class="s2">&quot;#!/usr/bin/env python3</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;# -*- coding: utf-8 -*-</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;extensions = [&#39;sphinx.ext.autodoc&#39;, &#39;sphinx.ext.mathjax&#39;, ]</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;templates_path = [&#39;_templates&#39;]</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;source_suffix = &#39;.rst&#39;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;master_doc = &#39;index&#39;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;project = &#39;sphinx-test&#39;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;copyright = &#39;2017, Guillaume Florent&#39;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;author = &#39;Guillaume Florent&#39;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;version = &#39;1.0&#39;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;release = &#39;1.0&#39;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;language = None</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;exclude_patterns = []</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;pygments_style = &#39;sphinx&#39;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;todo_include_todos = False</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;html_theme = &#39;alabaster&#39;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;# html_title = None</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;# html_short_title = None</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;# html_logo = None</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;# html_favicon = None</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;html_static_path = [&#39;_static&#39;]</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;htmlhelp_basename = &#39;sphinx-testdoc&#39;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;latex_elements = {}</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;latex_documents = [(master_doc, &#39;sphinx-test.tex&#39;,&quot;</span> \
+          <span class="s2">&quot; &#39;sphinx-test Documentation&#39;, &#39;Guillaume Florent&#39;, &#39;manual&#39;), ]</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;man_pages = [(master_doc, &#39;sphinx-test&#39;,&quot;</span> \
+          <span class="s2">&quot; &#39;sphinx-test Documentation&#39;, [author], 1)]</span><span class="se">\n</span><span class="s2">&quot;</span> \
+          <span class="s2">&quot;texinfo_documents = [(master_doc, &#39;sphinx-test&#39;,&quot;</span> \
+          <span class="s2">&quot; &#39;sphinx-test Documentation&#39;, author, &#39;sphinx-test&#39;,&quot;</span> \
+          <span class="s2">&quot; &#39;One line description of project.&#39;, &#39;Miscellaneous&#39;), ]</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+
+
+<span class="n">INDEX_HEADER</span> <span class="o">=</span> <span class="s2">&quot;Welcome to the library documentation</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;====================================</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;Contents:</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;.. toctree::</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;   :maxdepth: 2</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+<span class="n">INDEX_FOOTER</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;Indices and tables</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;==================</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;* :ref:`genindex`</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;* :ref:`modindex`</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;* :ref:`search`</span><span class="se">\n</span><span class="s2">&quot;</span> \
+               <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Guillaume Florent, Thomas Paviot, Bernard Uguen.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

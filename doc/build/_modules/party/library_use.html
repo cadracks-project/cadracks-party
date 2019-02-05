@@ -1,0 +1,373 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>party.library_use &mdash; party 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="party 0.1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> party
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../part_libraries.html">Part libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../party_presentation.html">party</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pljson_file_format.html">Parts libraries JSON format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../assembling_pljson.html">Assembling the parts library JSON (PLJSON) files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../using_pljson.html">Using parts library JSON (PLJSON) files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">party</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>party.library_use</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for party.library_use</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1"># coding: utf-8</span>
+
+<span class="sd">r&quot;&quot;&quot;Unique geometry script generation logic from a JSON parts library file&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">imp</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">party.templating</span> <span class="kn">import</span> <span class="n">reconstruct_script_code_template</span><span class="p">,</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">party.library_checking</span> <span class="kn">import</span> <span class="n">check_library_json_rules</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_scripts_folder</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="s2">&quot;scripts&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_steps_folder</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="s2">&quot;steps&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_stls_folder</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="s2">&quot;stls&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_htmls_folder</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="s2">&quot;htmls&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_create_folder</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Create a folder if it does not exist&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">folder_path</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating </span><span class="si">%s</span><span class="s2"> folder&quot;</span> <span class="o">%</span> <span class="n">folder_path</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Folder </span><span class="si">%s</span><span class="s2"> already exists&quot;</span> <span class="o">%</span> <span class="n">folder_path</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_script</span><span class="p">(</span><span class="n">json_generators</span><span class="p">,</span> <span class="n">scripts_folder</span><span class="p">,</span> <span class="n">part_id</span><span class="p">,</span> <span class="n">context_</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Generate the Python geometry script for a given part_id</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    json_generators : dict</span>
+<span class="sd">        Geometry generation code (key: generator id; value: lines of code)</span>
+<span class="sd">    scripts_folder : str</span>
+<span class="sd">        The folder where the script should be written</span>
+<span class="sd">    part_id : str</span>
+<span class="sd">        part id</span>
+<span class="sd">    context_ : dict</span>
+<span class="sd">        Values linked to the part_id</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str : the path to the created Python geometry file</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;tmp.py&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmp_file</span><span class="p">:</span>
+        <span class="n">tmp_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">reconstruct_script_code_template</span><span class="p">(</span>
+            <span class="n">json_generators</span><span class="p">[</span><span class="n">context_</span><span class="p">[</span><span class="s2">&quot;generator&quot;</span><span class="p">]]))</span>
+
+    <span class="c1"># Use tmp.py as a template for context_ and write the results to the</span>
+    <span class="c1"># part script</span>
+    <span class="n">py_geometry_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">scripts_folder</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.py&quot;</span> <span class="o">%</span> <span class="n">part_id</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">py_geometry_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">render</span><span class="p">(</span><span class="s2">&quot;tmp.py&quot;</span><span class="p">,</span> <span class="n">context_</span><span class="p">))</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;tmp.py&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">py_geometry_file</span>
+
+
+<span class="k">def</span> <span class="nf">_generate_cad</span><span class="p">(</span><span class="n">output_folder</span><span class="p">,</span> <span class="n">py_geometry_file</span><span class="p">,</span> <span class="n">output_format</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">output_format</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;step&quot;</span><span class="p">,</span> <span class="s2">&quot;stl&quot;</span><span class="p">,</span> <span class="s2">&quot;html&quot;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span>
+    <span class="n">py_geometry_module</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">load_source</span><span class="p">(</span><span class="n">py_geometry_file</span><span class="p">,</span> <span class="n">py_geometry_file</span><span class="p">)</span>
+    <span class="n">part</span> <span class="o">=</span> <span class="n">py_geometry_module</span><span class="o">.</span><span class="n">part</span>
+    <span class="n">part_id</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">py_geometry_file</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">part_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">part_id</span><span class="p">)</span>  <span class="c1"># Keeps the OCC STEP Writer happy !</span>
+
+    <span class="k">if</span> <span class="n">output_format</span> <span class="o">==</span> <span class="s2">&quot;step&quot;</span><span class="p">:</span>
+        <span class="n">part</span><span class="o">.</span><span class="n">to_step</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_folder</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.stp&quot;</span> <span class="o">%</span> <span class="n">part_id</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">output_format</span> <span class="o">==</span> <span class="s2">&quot;stl&quot;</span><span class="p">:</span>
+        <span class="n">part</span><span class="o">.</span><span class="n">to_stl</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_folder</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.stl&quot;</span> <span class="o">%</span> <span class="n">part_id</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">output_format</span> <span class="o">==</span> <span class="s2">&quot;html&quot;</span><span class="p">:</span>
+        <span class="n">part</span><span class="o">.</span><span class="n">to_html</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_folder</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.html&quot;</span> <span class="o">%</span> <span class="n">part_id</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="generate"><a class="viewcode-back" href="../../party.html#party.library_use.generate">[docs]</a><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">json_library_filepath</span><span class="p">,</span> <span class="n">generate_steps</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">generate_stls</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+             <span class="n">generate_htmls</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Create a geometry generation script for each part defined</span>
+<span class="sd">    in the JSON file passed as a parameter</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    json_library_filepath : str</span>
+<span class="sd">        The path to the JSON file describing the parts library</span>
+<span class="sd">    generate_steps : bool</span>
+<span class="sd">    generate_stls : bool</span>
+<span class="sd">    generate_htmls : bool</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    KeyError</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get the path of the JSON file passed as a parameter</span>
+    <span class="n">base_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">json_library_filepath</span><span class="p">)</span>
+    <span class="n">scripts_folder</span> <span class="o">=</span> <span class="n">_scripts_folder</span><span class="p">(</span><span class="n">folder_path</span><span class="o">=</span><span class="n">base_folder</span><span class="p">)</span>
+
+    <span class="n">_create_folder</span><span class="p">(</span><span class="n">scripts_folder</span><span class="p">)</span>
+
+    <span class="c1"># Deal with folder creation only one (i.e. not in the loop)</span>
+    <span class="k">if</span> <span class="n">generate_steps</span><span class="p">:</span>
+        <span class="n">steps_folder</span> <span class="o">=</span> <span class="n">_steps_folder</span><span class="p">(</span><span class="n">base_folder</span><span class="p">)</span>
+        <span class="n">_create_folder</span><span class="p">(</span><span class="n">steps_folder</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">generate_stls</span><span class="p">:</span>
+        <span class="n">stls_folder</span> <span class="o">=</span> <span class="n">_stls_folder</span><span class="p">(</span><span class="n">base_folder</span><span class="p">)</span>
+        <span class="n">_create_folder</span><span class="p">(</span><span class="n">stls_folder</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">generate_htmls</span><span class="p">:</span>
+        <span class="n">htmls_folder</span> <span class="o">=</span> <span class="n">_htmls_folder</span><span class="p">(</span><span class="n">base_folder</span><span class="p">)</span>
+        <span class="n">_create_folder</span><span class="p">(</span><span class="n">htmls_folder</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_library_filepath</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+        <span class="n">json_file_content</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+
+    <span class="n">json_generators</span> <span class="o">=</span> <span class="n">json_file_content</span><span class="p">[</span><span class="s2">&quot;generators&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Check data is not empty</span>
+    <span class="k">for</span> <span class="n">part_id</span><span class="p">,</span> <span class="n">context_</span> <span class="ow">in</span> <span class="n">json_file_content</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">py_geometry_file</span> <span class="o">=</span> <span class="n">_generate_script</span><span class="p">(</span><span class="n">json_generators</span><span class="p">,</span> <span class="n">scripts_folder</span><span class="p">,</span>
+                                            <span class="n">part_id</span><span class="p">,</span> <span class="n">context_</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">generate_steps</span><span class="p">:</span>
+            <span class="n">_generate_cad</span><span class="p">(</span><span class="n">steps_folder</span><span class="p">,</span> <span class="n">py_geometry_file</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;step&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">generate_stls</span><span class="p">:</span>
+            <span class="n">_generate_cad</span><span class="p">(</span><span class="n">stls_folder</span><span class="p">,</span> <span class="n">py_geometry_file</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;stl&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">generate_htmls</span><span class="p">:</span>
+            <span class="n">_generate_cad</span><span class="p">(</span><span class="n">htmls_folder</span><span class="p">,</span> <span class="n">py_geometry_file</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;html&quot;</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="generate_all"><a class="viewcode-back" href="../../party.html#party.library_use.generate_all">[docs]</a><span class="k">def</span> <span class="nf">generate_all</span><span class="p">(</span><span class="n">base_folder</span><span class="p">,</span> <span class="n">preview</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">generate_steps</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                 <span class="n">generate_stls</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;For each folder containing a JSON parts library definition:</span>
+<span class="sd">    - check the JSON file is OK</span>
+<span class="sd">    - if so, generate the geometry scripts</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    base_folder : str</span>
+<span class="sd">        The root folder from which to generate</span>
+<span class="sd">    preview : bool</span>
+<span class="sd">        If True, do everything but creating the geometry scripts</span>
+<span class="sd">        If False, also generate the geometry scripts</span>
+<span class="sd">    generate_steps : bool</span>
+<span class="sd">    generate_stls : bool</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">base_folder</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;library.json&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+            <span class="n">json_filename_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;library.json&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Library filename : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">json_filename_</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Checking the rules for the library JSON ...&quot;</span><span class="p">)</span>
+            <span class="n">ok</span><span class="p">,</span> <span class="n">errors</span> <span class="o">=</span> <span class="n">check_library_json_rules</span><span class="p">(</span><span class="n">json_filename</span><span class="o">=</span><span class="n">json_filename_</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ok</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;... done. Rules are OK&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating the Python scripts from the library &quot;</span>
+                            <span class="s2">&quot;JSON ...&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">preview</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                    <span class="n">generate</span><span class="p">(</span><span class="n">json_library_filepath</span><span class="o">=</span><span class="n">json_filename_</span><span class="p">,</span>
+                             <span class="n">generate_steps</span><span class="o">=</span><span class="n">generate_steps</span><span class="p">,</span>
+                             <span class="n">generate_stls</span><span class="o">=</span><span class="n">generate_stls</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;... done&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;The library contains errors, please &quot;</span>
+                             <span class="s2">&quot;correct these before generating the scripts&quot;</span><span class="p">)</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Guillaume Florent, Thomas Paviot, Bernard Uguen.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

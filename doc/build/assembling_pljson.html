@@ -1,0 +1,445 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Assembling the parts library JSON (PLJSON) files &mdash; party 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="party 0.1.0 documentation" href="index.html"/>
+        <link rel="next" title="Using parts library JSON (PLJSON) files" href="using_pljson.html"/>
+        <link rel="prev" title="Parts libraries JSON format" href="pljson_file_format.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> party
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="part_libraries.html">Part libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="party_presentation.html">party</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pljson_file_format.html">Parts libraries JSON format</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Assembling the parts library JSON (PLJSON) files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#roles">Roles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#library-creators">Library creators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#library-users">Library users</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#template-files-t-pljson">Template files (T-PLJSON)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parts-library-templates-skeleton-creation">Parts library templates skeleton creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#standard-mechanisms">Standard mechanisms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#geometry-and-anchors-code-inclusion">Geometry and anchors code inclusion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alias-mechanism">Alias mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#include-mechanism">Include mechanism</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#automation">Automation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#checks">Checks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#constant-data-schema">Constant data schema</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rules">Rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#units-definition">Units definition</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_pljson.html">Using parts library JSON (PLJSON) files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">party</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Assembling the parts library JSON (PLJSON) files</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/assembling_pljson.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="assembling-the-parts-library-json-pljson-files">
+<span id="assembling-pljson-label"></span><h1>Assembling the parts library JSON (PLJSON) files<a class="headerlink" href="#assembling-the-parts-library-json-pljson-files" title="Permalink to this headline">¶</a></h1>
+<p>From the previous chapter (<a class="reference internal" href="pljson_file_format.html#pljson-file-format-label"><span>Parts libraries JSON format</span></a>), it is obvious that a
+PLJSON file contains duplicated information. This is intentional as it greatly simplifies
+the exploitation of the PLJSON files.</p>
+<p>Though, if we have 200 screws using the same threading, correcting an error for
+one of the threading definition values will be a very repetitive task
+as it will have to be corrected for each screw.</p>
+<p>To simplify the creation of PLJSON files, <strong>party</strong> provides a set of so-called
+&#8216;standard-mechanisms&#8217; ( see <a class="reference internal" href="#standard-mechanisms-label"><span>Standard mechanisms</span></a>).</p>
+<p>Creating a PLJSON file might use any kind of logic and information sources as
+long as the resulting PLJSON file conforms to the PLJSON file format (<a class="reference internal" href="pljson_file_format.html#pljson-file-format-label"><span>Parts libraries JSON format</span></a>)
+but these standard mechanisms are offered as a guided way to create the PLJSON files.</p>
+<div class="section" id="roles">
+<h2>Roles<a class="headerlink" href="#roles" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="library-creators">
+<h3>Library creators<a class="headerlink" href="#library-creators" title="Permalink to this headline">¶</a></h3>
+<p>Parts library creators are expected to know and use the T-PLJSON template files
+possibilities and the accompanying <a class="reference internal" href="#standard-mechanisms-label"><span>Standard mechanisms</span></a></p>
+</div>
+<div class="section" id="library-users">
+<h3>Library users<a class="headerlink" href="#library-users" title="Permalink to this headline">¶</a></h3>
+<p>If your intention is only to use a parts library (PLJSON) file for a project,
+you do not need to know about what follows.</p>
+</div>
+</div>
+<div class="section" id="template-files-t-pljson">
+<h2>Template files (T-PLJSON)<a class="headerlink" href="#template-files-t-pljson" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="parts-library-templates-skeleton-creation">
+<h3>Parts library templates skeleton creation<a class="headerlink" href="#parts-library-templates-skeleton-creation" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="party.html#party.library_creation.create_skeleton" title="party.library_creation.create_skeleton"><code class="xref py py-func docutils literal"><span class="pre">create_skeleton()</span></code></a> function
+of the <a class="reference internal" href="party.html#module-party.library_creation" title="party.library_creation"><code class="xref py py-mod docutils literal"><span class="pre">party.library_creation</span></code></a> module creates a starting point for a parts library
+project based on template files.</p>
+</div>
+<div class="section" id="standard-mechanisms">
+<span id="standard-mechanisms-label"></span><h3>Standard mechanisms<a class="headerlink" href="#standard-mechanisms" title="Permalink to this headline">¶</a></h3>
+<p><strong>party</strong> provides the following mechanisms to create parts library (PLJSON) files from
+part library template files:</p>
+<ul class="simple">
+<li>geometry and anchors code inclusion</li>
+<li>alias mechanism</li>
+<li>include mechanism (in development)</li>
+</ul>
+</div>
+<div class="section" id="geometry-and-anchors-code-inclusion">
+<h3>Geometry and anchors code inclusion<a class="headerlink" href="#geometry-and-anchors-code-inclusion" title="Permalink to this headline">¶</a></h3>
+<p>This mechanism is handled by the <a class="reference internal" href="party.html#party.library_creation.template_handle_generators" title="party.library_creation.template_handle_generators"><code class="xref py py-func docutils literal"><span class="pre">template_handle_generators()</span></code></a>
+function of the <a class="reference internal" href="party.html#module-party.library_creation" title="party.library_creation"><code class="xref py py-mod docutils literal"><span class="pre">party.library_creation</span></code></a> module.</p>
+<p>It expects:</p>
+<ul class="simple">
+<li>a <em>{{ generators }}</em> tag as the value of the &#8216;generators&#8217; id in the template file</li>
+</ul>
+<div class="highlight-json"><div class="highlight"><pre><span></span>{
+  &quot;metadata&quot;: {...},
+  &quot;generators&quot;: { {{ generators }} },
+  &quot;rules&quot;: {...},
+  &quot;data&quot;: {...}
+}
+</pre></div>
+</div>
+<ul class="simple">
+<li>the geometry and anchors generation scripts in a <em>generators</em> subfolder of the folder containing the template file.</li>
+</ul>
+</div>
+<div class="section" id="alias-mechanism">
+<h3>Alias mechanism<a class="headerlink" href="#alias-mechanism" title="Permalink to this headline">¶</a></h3>
+<p>This mechanism is handled by the <a class="reference internal" href="party.html#party.library_creation.template_handle_aliases" title="party.library_creation.template_handle_aliases"><code class="xref py py-func docutils literal"><span class="pre">template_handle_aliases()</span></code></a>
+function of the <a class="reference internal" href="party.html#module-party.library_creation" title="party.library_creation"><code class="xref py py-mod docutils literal"><span class="pre">party.library_creation</span></code></a> module.</p>
+<p>It expects:</p>
+<ul class="simple">
+<li>an <em>alias</em> entry in the template file where the aliases are defined</li>
+</ul>
+<div class="highlight-json"><div class="highlight"><pre><span></span>{
+  &quot;metadata&quot;: {...},
+  &quot;generators&quot;: { {{ generators }} },
+  &quot;rules&quot;: {...},
+  &quot;aliases&quot;: {
+      &quot;M1.6_grade_A&quot;: {
+        &quot;generics&quot;: &quot;__alias__M1.6_generics&quot;,
+        &quot;grade_specifics&quot;: &quot;__alias__M1.6_grade_A_specifics&quot;
+      },
+      &quot;M1.6_grade_B&quot;:{
+        &quot;generics&quot;: &quot;__alias__M1.6_generics&quot;,
+        &quot;grade_specifics&quot;: &quot;__alias__M1.6_grade_B_specifics&quot;
+      },
+      &quot;M1.6_generics&quot;: {
+        &quot;p&quot;: 0.35,
+        &quot;b_ref_b&quot;: 9.00,
+        &quot;b_ref_c&quot;: 15.00,
+        &quot;b_ref_d&quot;: 28.00,
+        &quot;c_max&quot;: 0.25,
+        &quot;c_min&quot;: 0.10,
+        &quot;d_a&quot;: 2.00,
+        &quot;d_s_max&quot;: 1.60,
+        &quot;l_f_max&quot;: 0.60,
+        &quot;k_nominal&quot;: 1.10,
+        &quot;r_min&quot;: 0.10,
+        &quot;s_max&quot;: 3.20
+      },
+      &quot;M1.6_grade_A_specifics&quot;: {
+        &quot;d_s_min&quot;: 1.46,
+        &quot;d_w_min&quot;: 2.27,
+        &quot;e&quot;: 3.41,
+        &quot;k_max&quot;: 1.225,
+        &quot;k_min&quot;: 0.975,
+        &quot;k_w_e_min&quot;: 0.68,
+        &quot;s_min&quot;: 3.02
+      },
+      &quot;M1.6_grade_B_specifics&quot;: {
+        &quot;d_s_min&quot;: 1.35,
+        &quot;d_w_min&quot;: 2.30,
+        &quot;e&quot;: 3.28,
+        &quot;k_max&quot;: 1.30,
+        &quot;k_min&quot;: 0.9,
+        &quot;k_w_e_min&quot;: 0.63,
+        &quot;s_min&quot;: 2.90
+      },
+
+      &quot;M2_grade_A&quot;: {
+        &quot;generics&quot;: &quot;__alias__M2_generics&quot;,
+        &quot;grade_specifics&quot;: &quot;__alias__M2_grade_A_specifics&quot;
+      },
+      &quot;M2_grade_B&quot;:{
+        &quot;generics&quot;: &quot;__alias__M2_generics&quot;,
+        &quot;grade_specifics&quot;: &quot;__alias__M2_grade_B_specifics&quot;
+      },
+      &quot;M2_generics&quot;: {
+        &quot;p&quot;: 0.40,
+        &quot;b_ref_b&quot;: 10.00,
+        &quot;b_ref_c&quot;: 16.00,
+        &quot;b_ref_d&quot;: 29.00,
+        &quot;c_max&quot;: 0.25,
+        &quot;c_min&quot;: 0.10,
+        &quot;d_a&quot;: 2.60,
+        &quot;d_s_max&quot;: 2.00,
+        &quot;l_f_max&quot;: 0.80,
+        &quot;k_nominal&quot;: 1.40,
+        &quot;r_min&quot;: 0.10,
+        &quot;s_max&quot;: 4.00
+      },
+      &quot;M2_grade_A_specifics&quot;: {
+        &quot;d_s_min&quot;: 1.86,
+        &quot;d_w_min&quot;: 3.07,
+        &quot;e&quot;: 4.32,
+        &quot;k_max&quot;: 1.525,
+        &quot;k_min&quot;: 1.275,
+        &quot;k_w_e_min&quot;: 0.89,
+        &quot;s_min&quot;: 3.82
+      },
+      &quot;M2_grade_B_specifics&quot;: {
+        &quot;d_s_min&quot;: 1.75,
+        &quot;d_w_min&quot;: 2.95,
+        &quot;e&quot;: 4.18,
+        &quot;k_max&quot;: 1.6,
+        &quot;k_min&quot;: 1.2,
+        &quot;k_w_e_min&quot;: 0.84,
+        &quot;s_min&quot;: 3.70
+      },
+  &quot;data&quot;: {...}
+}
+</pre></div>
+</div>
+<p>As illustrated by the example, aliases can be nested.</p>
+<ul class="simple">
+<li>the use of the defined aliases in the <strong>data</strong> section with an &#8216;__alias__&#8217; prefix.</li>
+</ul>
+<div class="highlight-json"><div class="highlight"><pre><span></span>{
+  &quot;metadata&quot;: {...},
+  &quot;generators&quot;: { {{ generators }} },
+  &quot;rules&quot;: {...},
+  &quot;data&quot;: {
+      &quot;M1.6x12_A&quot;: {
+        &quot;description&quot;: &quot;M1.6 ISO 4014 screw, 12 mm, grade A&quot;,
+        &quot;generator&quot;: &quot;iso4014_screw&quot;,
+        &quot;l_min&quot;: 11.65,
+        &quot;l_max&quot;: 12.35,
+        &quot;l_s_min&quot;: 1.20,
+        &quot;l_g_max&quot;: 3.00,
+        &quot;threading&quot;: &quot;__alias__M1.6_grade_A&quot;
+    },
+    ...
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="include-mechanism">
+<h3>Include mechanism<a class="headerlink" href="#include-mechanism" title="Permalink to this headline">¶</a></h3>
+<p>This mechanism is handled by the <a class="reference internal" href="party.html#party.library_creation.template_handle_includes" title="party.library_creation.template_handle_includes"><code class="xref py py-func docutils literal"><span class="pre">template_handle_includes()</span></code></a>
+function of the <a class="reference internal" href="party.html#module-party.library_creation" title="party.library_creation"><code class="xref py py-mod docutils literal"><span class="pre">party.library_creation</span></code></a> module.</p>
+<p>The include mechanism is currently in development.</p>
+</div>
+<div class="section" id="automation">
+<h3>Automation<a class="headerlink" href="#automation" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="party.html#party.library_creation.autocreate_library" title="party.library_creation.autocreate_library"><code class="xref py py-func docutils literal"><span class="pre">template_handle_includes()</span></code></a>
+function of the <a class="reference internal" href="party.html#module-party.library_creation" title="party.library_creation"><code class="xref py py-mod docutils literal"><span class="pre">party.library_creation</span></code></a> module analyzes the template file and uses the standard
+mechanisms in the right order to create the parts library (PLJSON) file.</p>
+</div>
+</div>
+<div class="section" id="checks">
+<h2>Checks<a class="headerlink" href="#checks" title="Permalink to this headline">¶</a></h2>
+<p>When the parts library JSON (PLJSON) file has been assembled, the <a class="reference internal" href="party.html#module-party.library_checking" title="party.library_checking"><code class="xref py py-mod docutils literal"><span class="pre">party.library_checking</span></code></a> module provides functions
+which goal is to check that the PLJSON file complies with the PLJSON file specification and that the data is correct.</p>
+<div class="section" id="constant-data-schema">
+<h3>Constant data schema<a class="headerlink" href="#constant-data-schema" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="party.html#party.library_checking.check_library_fields" title="party.library_checking.check_library_fields"><code class="xref py py-func docutils literal"><span class="pre">check_library_fields()</span></code></a> function checks that the metadata for each entry in the
+<strong>data</strong> section is the same.</p>
+</div>
+<div class="section" id="rules">
+<h3>Rules<a class="headerlink" href="#rules" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="party.html#party.library_checking.check_library_json_rules" title="party.library_checking.check_library_json_rules"><code class="xref py py-func docutils literal"><span class="pre">check_library_json_rules()</span></code></a> function checks that the rules defined in
+the <strong>rules</strong> section are respected in the <strong>data</strong> section of the PLJSON file.</p>
+</div>
+<div class="section" id="units-definition">
+<h3>Units definition<a class="headerlink" href="#units-definition" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="party.html#party.library_checking.check_library_units_definition" title="party.library_checking.check_library_units_definition"><code class="xref py py-func docutils literal"><span class="pre">check_library_units_definition()</span></code></a> function checks that the units defined
+in the <strong>metadata/units</strong> are properly defined and that each fields describing a part characteristic are present in the units definition.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="using_pljson.html" class="btn btn-neutral float-right" title="Using parts library JSON (PLJSON) files" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pljson_file_format.html" class="btn btn-neutral" title="Parts libraries JSON format" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Guillaume Florent, Thomas Paviot, Bernard Uguen.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

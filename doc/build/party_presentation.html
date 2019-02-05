@@ -1,0 +1,250 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>party &mdash; party 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="party 0.1.0 documentation" href="index.html"/>
+        <link rel="next" title="Parts libraries JSON format" href="pljson_file_format.html"/>
+        <link rel="prev" title="Part libraries" href="part_libraries.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> party
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="part_libraries.html">Part libraries</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">party</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-party">What is party ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing">Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parts-libraries-creation">Parts libraries creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parts-libraries-use">Parts libraries use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pljson_file_format.html">Parts libraries JSON format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="assembling_pljson.html">Assembling the parts library JSON (PLJSON) files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_pljson.html">Using parts library JSON (PLJSON) files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">party</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>party</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/party_presentation.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="party">
+<h1>party<a class="headerlink" href="#party" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-party">
+<h2>What is party ?<a class="headerlink" href="#what-is-party" title="Permalink to this headline">¶</a></h2>
+<p><strong>party</strong> is a Python package that handles parts libraries creation and use.</p>
+</div>
+<div class="section" id="installing">
+<h2>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="installation">
+<div class="code-block-caption"><span class="caption-text">Installing from the git repo:</span><a class="headerlink" href="#installation" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>git clone https://github.com/guillaume-florent/party
+<span class="nb">cd</span> party
+python setup.py install
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="parts-libraries-creation">
+<h2>Parts libraries creation<a class="headerlink" href="#parts-libraries-creation" title="Permalink to this headline">¶</a></h2>
+<p>A parts library might contain a lot of duplicated information (e.g. all the M3 screws will have the data defined for their threading).
+<strong>party</strong> provides standard mechanisms to avoid this duplication and to create the parts libraries JSON files from <strong>template</strong> files
+where no data is duplicated.</p>
+<p>The parts library files must also contain the part geometry creation logic. <strong>party</strong> deals with inserting the geometry creation defined
+in a Python script into the parts library JSON file. As we will see, the geometry creation logic can also define <strong>anchors</strong> that allow to attach
+the parts from the library in a wider project.</p>
+</div>
+<div class="section" id="parts-libraries-use">
+<h2>Parts libraries use<a class="headerlink" href="#parts-libraries-use" title="Permalink to this headline">¶</a></h2>
+<p><strong>party</strong> can generate CAD files from the parts library JSON file (PLJSON)
+and documentation in several formats for the parts library (HTML, PDF, ePub, Latex..) using Sphinx.</p>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p><strong>party</strong> depends on:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/guillaume-florent/ccad">ccad</a> (which itself depends on <a class="reference external" href="http://www.pythonocc.org/">PythonOCC</a>)</li>
+<li><a class="reference external" href="http://jinja.pocoo.org/">jinja2</a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pljson_file_format.html" class="btn btn-neutral float-right" title="Parts libraries JSON format" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="part_libraries.html" class="btn btn-neutral" title="Part libraries" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Guillaume Florent, Thomas Paviot, Bernard Uguen.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

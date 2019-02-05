@@ -1,0 +1,408 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>party.library_checking &mdash; party 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="party 0.1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> party
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../part_libraries.html">Part libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../party_presentation.html">party</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pljson_file_format.html">Parts libraries JSON format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../assembling_pljson.html">Assembling the parts library JSON (PLJSON) files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../using_pljson.html">Using parts library JSON (PLJSON) files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">party</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>party.library_checking</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for party.library_checking</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1"># coding: utf-8</span>
+
+<span class="sd">r&quot;&quot;&quot;Parts library checks&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="check_library_json_rules"><a class="viewcode-back" href="../../party.html#party.library_checking.check_library_json_rules">[docs]</a><span class="k">def</span> <span class="nf">check_library_json_rules</span><span class="p">(</span><span class="n">json_filename</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Check that the entries in the &#39;data&#39; field of a library respect the</span>
+<span class="sd">    rules defined in the &#39;rules&#39; field of the library</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    json_filename : str</span>
+<span class="sd">        Path to the JSON file that describes the parts library</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple(bool, errors)</span>
+<span class="sd">        bool : True if the library is OK, False otherwise</span>
+<span class="sd">        errors : dict (keys: part_identifier, values: list of broken rules)</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    NameError if the rules definition contain wrong identifiers</span>
+<span class="sd">    SyntaxError if there is a syntax error in the rules definition</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+        <span class="n">json_file_content</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+
+    <span class="n">library_ok</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">part_id</span><span class="p">,</span> <span class="n">part_values</span> <span class="ow">in</span> <span class="n">json_file_content</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># assign the values to a Python variable with the same name</span>
+        <span class="k">for</span> <span class="n">dict_entry_key</span><span class="p">,</span> <span class="n">dict_entry_value</span> <span class="ow">in</span> <span class="n">part_values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">dict_entry_value</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">unicode</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+                <span class="n">instruction</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dict_entry_key</span><span class="p">,</span> <span class="n">dict_entry_value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">instruction</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> = &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dict_entry_key</span><span class="p">,</span> <span class="n">dict_entry_value</span><span class="p">)</span>
+            <span class="k">exec</span><span class="p">(</span><span class="n">instruction</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">json_file_content</span><span class="p">[</span><span class="s2">&quot;rules&quot;</span><span class="p">]:</span>
+            <span class="n">instruction</span> <span class="o">=</span> <span class="s2">&quot;bool_ = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">rule</span>
+            <span class="c1"># logger.info(&quot;Checking &#39;%s&#39; for part %s&quot; % (rule, part_id))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">exec</span><span class="p">(</span><span class="n">instruction</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">bool_</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+                    <span class="c1"># logger.info(&quot;OK&quot;)</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">library_ok</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="k">if</span> <span class="n">part_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">errors</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="n">errors</span><span class="p">[</span><span class="n">part_id</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                    <span class="n">errors</span><span class="p">[</span><span class="n">part_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Library data definition error&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+                <span class="n">library_ok</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">if</span> <span class="n">part_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">errors</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">errors</span><span class="p">[</span><span class="n">part_id</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="n">errors</span><span class="p">[</span><span class="n">part_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Rules definition error (NameError)&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">library_ok</span><span class="p">,</span> <span class="n">errors</span>
+
+</div>
+<div class="viewcode-block" id="check_library_units_definition"><a class="viewcode-back" href="../../party.html#party.library_checking.check_library_units_definition">[docs]</a><span class="k">def</span> <span class="nf">check_library_units_definition</span><span class="p">(</span><span class="n">json_filename</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Test that each field of a data entry is referenced in the &#39;units&#39;</span>
+<span class="sd">    section of the library.json file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    json_filename : str</span>
+<span class="sd">        Path to the JSON file that describes the parts library</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple(bool, errors)</span>
+<span class="sd">        bool : True if the library is OK, False otherwise</span>
+<span class="sd">        errors : dict (keys: part_identifier, values: list of broken rules)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">library_ok</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+        <span class="n">json_file_content</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">unit</span><span class="p">,</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">json_file_content</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">definition</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
+                    <span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">library_ok</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="k">if</span> <span class="s2">&quot;units definition&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">errors</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="n">errors</span><span class="p">[</span><span class="s2">&quot;units definition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                    <span class="n">errors</span><span class="p">[</span><span class="s2">&quot;units definition&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;field &#39;</span><span class="si">%s</span><span class="s2">&#39; is duplicated&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="n">library_ok</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="s2">&quot;units definition&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">errors</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="n">errors</span><span class="p">[</span><span class="s2">&quot;units definition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">errors</span><span class="p">[</span><span class="s2">&quot;units definition&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Improperly defined units : </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">unit</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">part_id</span><span class="p">,</span> <span class="n">part_values</span> <span class="ow">in</span> <span class="n">json_file_content</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">dict_entry_key</span> <span class="ow">in</span> <span class="n">part_values</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">dict_entry_key</span> <span class="ow">in</span> <span class="n">fields</span> <span class="ow">or</span> \
+                            <span class="n">dict_entry_key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;generator&quot;</span><span class="p">]:</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">library_ok</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">if</span> <span class="n">part_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">errors</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">errors</span><span class="p">[</span><span class="n">part_id</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="n">errors</span><span class="p">[</span><span class="n">part_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;field &#39;</span><span class="si">%s</span><span class="s2">&#39; not defined in units&quot;</span> <span class="o">%</span> <span class="n">dict_entry_key</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Library data definition error&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">library_ok</span><span class="p">,</span> <span class="n">errors</span>
+
+</div>
+<div class="viewcode-block" id="check_library_fields"><a class="viewcode-back" href="../../party.html#party.library_checking.check_library_fields">[docs]</a><span class="k">def</span> <span class="nf">check_library_fields</span><span class="p">(</span><span class="n">json_filename</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Check that every entry in the &#39;data&#39; section if the library JSON</span>
+<span class="sd">    file has the same fields (order does not matter)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    json_filename : str</span>
+<span class="sd">        Path to the JSON file that describes the parts library</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple(bool, errors)</span>
+<span class="sd">        bool : True if the library is OK, False otherwise</span>
+<span class="sd">        errors : dict (keys: part_identifier, values: list of broken rules)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">library_ok</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="n">reference_set_of_fields</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+        <span class="n">json_file_content</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+
+    <span class="c1"># Populate the reference set of fields</span>
+    <span class="n">feed</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># Hackish way to only consider the first dictionnary entry</span>
+    <span class="k">for</span> <span class="n">part_id</span><span class="p">,</span> <span class="n">part_values</span> <span class="ow">in</span> <span class="n">json_file_content</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">feed</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">dict_entry_key</span> <span class="ow">in</span> <span class="n">part_values</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">reference_set_of_fields</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dict_entry_key</span><span class="p">)</span>
+        <span class="n">feed</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Reference set of fields : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">reference_set_of_fields</span><span class="p">))</span>
+
+    <span class="c1"># Check the set of fields in the data section</span>
+    <span class="c1"># against the reference set of fields</span>
+    <span class="k">for</span> <span class="n">part_id</span><span class="p">,</span> <span class="n">part_values</span> <span class="ow">in</span> <span class="n">json_file_content</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">current_set_of_fields</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">dict_entry_key</span> <span class="ow">in</span> <span class="n">part_values</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">current_set_of_fields</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dict_entry_key</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">current_set_of_fields</span> <span class="o">==</span> <span class="n">reference_set_of_fields</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">library_ok</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">current_minus_ref</span> <span class="o">=</span> <span class="n">current_set_of_fields</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span>
+                <span class="n">reference_set_of_fields</span><span class="p">)</span>
+            <span class="n">ref_minus_current</span> <span class="o">=</span> <span class="n">reference_set_of_fields</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span>
+                <span class="n">current_set_of_fields</span><span class="p">)</span>
+            <span class="n">errors</span><span class="p">[</span><span class="n">part_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_minus_ref</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">ref_minus_current</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">library_ok</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">reference_set_of_fields</span>
+
+</div>
+<div class="viewcode-block" id="check_all"><a class="viewcode-back" href="../../party.html#party.library_checking.check_all">[docs]</a><span class="k">def</span> <span class="nf">check_all</span><span class="p">(</span><span class="n">json_filename</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Perform every possible test on the library</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    json_filename : str</span>
+<span class="sd">        Path to the JSON file that describes the parts library</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple(bool, errors)</span>
+<span class="sd">        bool : True if the library is OK, False otherwise</span>
+<span class="sd">        errors : dict (keys: part_identifier, values: list of broken rules)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Checking the library </span><span class="si">%s</span><span class="s2">  ...&quot;</span> <span class="o">%</span> <span class="n">json_filename</span><span class="p">)</span>
+    <span class="n">ok_rules</span><span class="p">,</span> <span class="n">errors_rules</span> <span class="o">=</span> <span class="n">check_library_json_rules</span><span class="p">(</span><span class="n">json_filename</span><span class="p">)</span>
+    <span class="n">ok_units</span><span class="p">,</span> <span class="n">errors_units</span> <span class="o">=</span> <span class="n">check_library_units_definition</span><span class="p">(</span><span class="n">json_filename</span><span class="p">)</span>
+    <span class="n">ok_fields</span><span class="p">,</span> <span class="n">errors_fields</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">check_library_fields</span><span class="p">(</span><span class="n">json_filename</span><span class="p">)</span>
+
+    <span class="n">ok</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="n">list_element</span> <span class="ow">is</span> <span class="bp">True</span> <span class="k">for</span> <span class="n">list_element</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ok_rules</span><span class="p">,</span> <span class="n">ok_units</span><span class="p">,</span> <span class="n">ok_fields</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">ok</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;...done - All OK&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;ERROR(S) in the library </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">json_filename</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;rules ok : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">ok_rules</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;units ok : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">ok_units</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;fields ok : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">ok_fields</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="p">([</span><span class="n">ok_rules</span><span class="p">,</span> <span class="n">ok_units</span><span class="p">,</span> <span class="n">ok_fields</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">errors_rules</span><span class="p">,</span> <span class="n">errors_units</span><span class="p">,</span> <span class="n">errors_fields</span><span class="p">])</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Guillaume Florent, Thomas Paviot, Bernard Uguen.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
