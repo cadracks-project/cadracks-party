@@ -14,8 +14,9 @@ head = translated(prism(filling(ngon(2 / 3**.5 * s_max / 2., 6)), (0, 0, k_max))
 threaded = cylinder(d_s_min / 2., l_max)
 unthreaded = cylinder(d_s_max / 2., l_g_max)
 
-part = head + threaded + unthreaded
-anchors = {1: {"position": (0., 0., 0.),
-               "direction": (0., 0., -1.),
-               "dimension": d_s_max,
-               "description": "screw head on plane"}}
+__shape__ = (head + threaded + unthreaded).shape
+__anchors__ = {"head_bottom": {"p": (0., 0., 0.),
+                               "u": (0., 0., -1.),
+                               "v": (1., 0., 0.),
+                               "dimension": d_s_max,
+                               "description": "screw head on plane"}}

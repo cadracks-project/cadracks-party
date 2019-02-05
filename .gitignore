@@ -91,7 +91,6 @@ ENV/
 .ropeproject
 /examples/doc/
 /examples/ISO_4014/scripts/
-/examples/ISO_4014/htmls/
 /examples/ISO_4014/steps/
 /examples/ISO_4014/stls/
 /examples/ISO_4014/svgs/

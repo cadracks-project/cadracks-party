@@ -6,7 +6,7 @@ r"""Example of initing a parts library project by generating a skeleton"""
 import os
 import logging
 
-from party.library_creation import create_skeleton
+from cadracks_party.library_creation import create_skeleton
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: %(levelname)6s :: '

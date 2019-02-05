@@ -1,9 +1,9 @@
 package:
-  name: party
+  name: cadracks_party
   version: "0.2.0"
 
 source:
-  path: ../party
+  path: ../cadracks_party
 
 build:
   number: 0
@@ -24,7 +24,7 @@ requirements:
     - ccad
 
 about:
-  home: https://github.com/osv-team/party
+  home: https://github.com/osv-team/cadracks_party
   license: GPLv3
   license_file: LICENSE.txt
   summary: Standard CAD parts libraries management

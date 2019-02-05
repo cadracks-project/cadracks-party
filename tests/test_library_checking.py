@@ -6,7 +6,7 @@ r"""Tests for rules_checking.py"""
 from os.path import join, dirname
 import pytest
 
-from party.library_checking import check_library_json_rules,\
+from cadracks_party.library_checking import check_library_json_rules,\
     check_library_units_definition, check_library_fields
 
 

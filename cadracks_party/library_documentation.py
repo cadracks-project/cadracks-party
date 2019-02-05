@@ -17,9 +17,9 @@ import logging
 
 from subprocess import call
 
-from party.library_checking import check_library_fields
-from party.library_use import generate
-from party.commons import create_folder
+from cadracks_party.library_checking import check_library_fields
+from cadracks_party.library_use import generate
+from cadracks_party.commons import create_folder
 
 logger = logging.getLogger(__name__)
 

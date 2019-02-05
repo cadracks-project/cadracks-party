@@ -6,7 +6,7 @@ r"""Parts library documentation creation example"""
 from os.path import dirname, join
 import logging
 
-from party.library_documentation import create_libraries_sphinx_sources
+from cadracks_party.library_documentation import create_libraries_sphinx_sources
 
 
 def main():

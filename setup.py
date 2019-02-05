@@ -9,7 +9,7 @@ from setuptools import setup
 import codecs
 from os import path
 
-import party
+import cadracks_party
 
 here = path.abspath(path.dirname(__file__))
 
@@ -19,15 +19,15 @@ with codecs.open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 
 setup(
-    name=party.__name__,
-    version=party.__version__,
-    description=party.__description__,
+    name=cadracks_party.__name__,
+    version=cadracks_party.__version__,
+    description=cadracks_party.__description__,
     long_description=long_description,
-    url=party.__url__,
-    download_url=party.__download_url__,
-    author=party.__author__,
-    author_email=party.__author_email__,
-    license=party.__license__,
+    url=cadracks_party.__url__,
+    download_url=cadracks_party.__download_url__,
+    author=cadracks_party.__author__,
+    author_email=cadracks_party.__author_email__,
+    license=cadracks_party.__license__,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
@@ -38,7 +38,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6'],
     keywords=['OpenCascade', 'PythonOCC', 'ccad', 'CAD', 'parts', 'json'],
-    packages=['party', ],
+    packages=['cadracks_party', ],
     install_requires=[],  # OCC, scipy and wx cannot be installed via pip
     extras_require={
         'dev': [],
@@ -47,6 +47,6 @@ setup(
     package_data={},
     data_files=[],
     entry_points={},
-    scripts=['bin/party-skeleton', 'bin/party-create', 'bin/party-use']
+    scripts=['bin/cadracks_party-skeleton', 'bin/cadracks_party-create', 'bin/cadracks_party-use']
 
     )

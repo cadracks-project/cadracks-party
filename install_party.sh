@@ -4,8 +4,8 @@
 # user="$(id -u)"
 home="${1:-$HOME}"
 
-imageName="guillaume-florent/party:latest"
-containerName="party"
+imageName="guillaume-florent/cadracks_party:latest"
+containerName="cadracks_party"
 displayVar="$DISPLAY"
 
 docker build --file Dockerfile.py3 --tag ${imageName} .

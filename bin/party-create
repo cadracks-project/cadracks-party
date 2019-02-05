@@ -8,8 +8,8 @@ from os import getcwd
 from os.path import join
 from argparse import ArgumentParser
 
-from party.library_creation import autocreate_library
-from party.library_checking import check_all
+from cadracks_party.library_creation import autocreate_library
+from cadracks_party.library_checking import check_all
 
 parser = ArgumentParser(description="Create the library.json file of the parts "
                                     "library from its template")

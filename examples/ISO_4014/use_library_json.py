@@ -9,7 +9,7 @@ cad files
 import logging
 from os.path import join, dirname
 
-from party.library_use import generate
+from cadracks_party.library_use import generate
 
 
 logging.basicConfig(level=logging.DEBUG,
@@ -19,5 +19,5 @@ logging.basicConfig(level=logging.DEBUG,
 generate(json_library_filepath=join(dirname(__file__), "library.json"),
          generate_steps=True,
          generate_stls=True,
-         generate_htmls=True,
+         # generate_htmls=True,
          generate_svgs=True)

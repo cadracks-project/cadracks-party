@@ -28,9 +28,9 @@ import copy
 
 from collections import OrderedDict
 
-from party.templating import render, generators_to_json_string, \
+from cadracks_party.templating import render, generators_to_json_string, \
     svg_to_json_string
-from party.commons import create_folder
+from cadracks_party.commons import create_folder
 
 if sys.version_info[0] < 3:
     PY2 = True
@@ -144,8 +144,8 @@ def create_skeleton(base_folder):
     #     create.write("\n")
     #     create.write("import logging\n")
     #     create.write("\n")
-    #     create.write("from party.library_creation import autocreate_library\n")
-    #     create.write("from party.library_checking import check_all\n")
+    #     create.write("from cadracks_party.library_creation import autocreate_library\n")
+    #     create.write("from cadracks_party.library_checking import check_all\n")
     #     create.write("\n")
     #     create.write("logging.basicConfig(level=logging.DEBUG,\n")
     #     create.write("                    format='%(asctime)s :: %"
@@ -171,7 +171,7 @@ def create_skeleton(base_folder):
     #     use.write("import logging\n")
     #     use.write("from os.path import join, dirname\n")
     #     use.write("\n")
-    #     use.write("from party.library_use import generate\n")
+    #     use.write("from cadracks_party.library_use import generate\n")
     #     use.write("\n")
     #     use.write("\n")
     #     use.write("logging.basicConfig(level=logging.DEBUG,\n")
@@ -340,7 +340,9 @@ def template_handle_aliases(file_in, file_out):
     for _, context_ in json_content["data"].items():
         # modify context with the alias mechanism
         while has_aliases(context_):
-            for k, v in context_.items():
+            # for k, v in context_.items():
+            # PY3
+            for k, v in list(context_.items()):
                 if "__alias__" in str(v):
                     key_in_aliases = str(v).replace("__alias__", "")
                     for alias_key, alias_value in \

@@ -8,7 +8,7 @@ from os import getcwd
 from os.path import join
 from argparse import ArgumentParser
 
-from party.library_creation import create_skeleton
+from cadracks_party.library_creation import create_skeleton
 
 
 parser = ArgumentParser(description="Generate a standard cad parts library "

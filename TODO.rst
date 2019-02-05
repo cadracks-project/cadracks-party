@@ -1,6 +1,10 @@
 TODO
 ====
 
+Cleanup old links to osv-team
+
+Update documentation
+
 Done
 ----
 

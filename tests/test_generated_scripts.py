@@ -12,7 +12,7 @@ import pytest
 
 # from ccad.model import Solid
 
-from party.scripts_checking import check_script
+from cadracks_party.scripts_checking import check_script
 
 
 def test_generated_scripts_from_scripts_folder_content():

@@ -5,8 +5,8 @@ r"""Script that creates the library.json file for the ISO 4014 standard"""
 
 
 import logging
-from party.library_creation import autocreate_library
-from party.library_checking import check_all
+from cadracks_party.library_creation import autocreate_library
+from cadracks_party.library_checking import check_all
 
 logger = logging.getLogger(__name__)
 

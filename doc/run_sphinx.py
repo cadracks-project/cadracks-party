@@ -15,6 +15,6 @@ folders = {"source": join(dirname(__file__), "source"),
 cwd = getcwd()
 chdir(folders["source"])
 call(["ls", "-l"])
-call("sphinx-apidoc -f -o ./ %s" % join(dirname(__file__), "../party/party"))
+call("sphinx-apidoc -f -o ./ %s" % join(dirname(__file__), "../cadracks_party/cadracks_party"))
 call("sphinx-build -b html %s %s" % (folders["source"], folders["build"]))
 chdir(cwd)

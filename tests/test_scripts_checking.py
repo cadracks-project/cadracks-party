@@ -5,7 +5,7 @@ r"""Tests for the scripts_checking module"""
 
 import pytest
 from os.path import join, dirname, isdir
-from party.scripts_checking import check_script,\
+from cadracks_party.scripts_checking import check_script,\
     check_all_scripts_from_library_jsons
 
 

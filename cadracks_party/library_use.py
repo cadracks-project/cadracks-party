@@ -10,9 +10,12 @@ import codecs
 from os import remove, walk
 from os.path import join, splitext, dirname, basename
 
-from party.templating import reconstruct_script_code_template, render
-from party.library_checking import check_library_json_rules
-from party.commons import create_folder
+from aocxchange.step import StepExporter
+from aocxchange.stl import StlExporter
+
+from cadracks_party.templating import reconstruct_script_code_template, render
+from cadracks_party.library_checking import check_library_json_rules
+from cadracks_party.commons import create_folder
 
 
 logger = logging.getLogger(__name__)
@@ -75,20 +78,33 @@ def _generate_cad(output_folder, py_geometry_file, output_format):
     if output_format not in ["step", "stl", "html"]:
         raise ValueError
     py_geometry_module = imp.load_source(py_geometry_file, py_geometry_file)
-    part = py_geometry_module.part
+    shape = py_geometry_module.__shape__
     part_id = splitext(basename(py_geometry_file))[0]
     part_id = str(part_id)  # Keeps the OCC STEP Writer happy !
 
     if output_format == "step":
-        part.to_step(join(output_folder, "%s.stp" % part_id))
+        # part.to_step(join(output_folder, "%s.stp" % part_id))
+        exporter = StepExporter(filename=join(output_folder, "%s.stp" % part_id))
+        exporter.add_shape(shape)
+        exporter.write_file()
     elif output_format == "stl":
-        part.to_stl(join(output_folder, "%s.stl" % part_id))
-    elif output_format == "html":
-        part.to_html(join(output_folder, "%s.html" % part_id))
+        # part.to_stl(join(output_folder, "%s.stl" % part_id))
+        exporter = StlExporter(filename=join(output_folder, "%s.stl" % part_id))
+        exporter.set_shape(shape)
+        exporter.write_file()
+    # elif output_format == "html":
+    #     part.to_html(join(output_folder, "%s.html" % part_id))
+    else:
+        msg = "Unknown export format"
+        logger.error(msg)
+        raise ValueError(msg)
 
 
-def generate(json_library_filepath, generate_steps=False, generate_stls=False,
-             generate_htmls=False, generate_svgs=False):
+def generate(json_library_filepath,
+             generate_steps=False,
+             generate_stls=False,
+             # generate_htmls=False,
+             generate_svgs=False):
     r"""Create a geometry generation script for each part defined
     in the PJSON file passed as a parameter
 
@@ -98,7 +114,7 @@ def generate(json_library_filepath, generate_steps=False, generate_stls=False,
         The path to the PJSON file describing the parts library
     generate_steps : bool
     generate_stls : bool
-    generate_htmls : bool
+
     generate_svgs : bool
         Should the SVG drawings embedded in the PJSON file be extracted
 
@@ -120,9 +136,9 @@ def generate(json_library_filepath, generate_steps=False, generate_stls=False,
     if generate_stls:
         stls_folder = _stls_folder(base_folder)
         create_folder(stls_folder)
-    if generate_htmls:
-        htmls_folder = _htmls_folder(base_folder)
-        create_folder(htmls_folder)
+    # if generate_htmls:
+    #     htmls_folder = _htmls_folder(base_folder)
+    #     create_folder(htmls_folder)
     if generate_svgs:
         svgs_folder = _svgs_folder(base_folder)
         create_folder(svgs_folder)
@@ -149,11 +165,13 @@ def generate(json_library_filepath, generate_steps=False, generate_stls=False,
             _generate_cad(steps_folder, py_geometry_file, output_format="step")
         if generate_stls:
             _generate_cad(stls_folder, py_geometry_file, output_format="stl")
-        if generate_htmls:
-            _generate_cad(htmls_folder, py_geometry_file, output_format="html")
+        # if generate_htmls:
+        #     _generate_cad(htmls_folder, py_geometry_file, output_format="html")
 
 
-def generate_all(base_folder, preview=False, generate_steps=False,
+def generate_all(base_folder,
+                 preview=False,
+                 generate_steps=False,
                  generate_stls=False):
     r"""For each folder containing a JSON parts library definition:
     - check the JSON file is OK

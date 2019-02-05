@@ -9,7 +9,7 @@ from os.path import join
 from os import getcwd
 from argparse import ArgumentParser
 
-from party.library_use import generate
+from cadracks_party.library_use import generate
 
 parser = ArgumentParser(description="Crate scripts and CAD files from the "
                                     "library.json")
