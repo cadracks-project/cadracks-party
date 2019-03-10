@@ -47,6 +47,6 @@ setup(
     package_data={},
     data_files=[],
     entry_points={},
-    scripts=['bin/cadracks_party-skeleton', 'bin/cadracks_party-create', 'bin/cadracks_party-use']
+    scripts=['bin/party-skeleton', 'bin/party-create', 'bin/party-use']
 
     )
