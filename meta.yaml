@@ -26,5 +26,5 @@ requirements:
 about:
   home: https://github.com/osv-team/cadracks_party
   license: GPLv3
-  license_file: LICENSE.txt
+  license_file: COPYING
   summary: Standard CAD parts libraries management
