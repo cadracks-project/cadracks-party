@@ -95,4 +95,9 @@ ENV/
 /examples/ISO_4014/stls/
 /examples/ISO_4014/svgs/
 /examples/ISO_4014/library.json
+/examples/ISO_4032/scripts/
+/examples/ISO_4032/steps/
+/examples/ISO_4032/stls/
+/examples/ISO_4032/svgs/
+/examples/ISO_4032/library.json
 /.pytest_cache/

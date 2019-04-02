@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 # coding: utf-8
 
 # Copyright 2018-2019 Guillaume Florent, Thomas Paviot, Bernard Uguen
@@ -18,12 +18,12 @@
 # You should have received a copy of the GNU General Public License
 # along with cadracks-party.  If not, see <https://www.gnu.org/licenses/>.
 
-r"""Script that creates the library.json file for the ISO 4014 standard"""
+r"""Script that creates the library.json file for the ISO 4032 standard"""
 
 
 import logging
-from cadracks_party.library_creation import autocreate_library
-from cadracks_party.library_checking import check_all
+from party.library_creation import autocreate_library
+from party.library_checking import check_all
 
 logger = logging.getLogger(__name__)
 
@@ -33,10 +33,10 @@ if __name__ == "__main__":
                         format='%(asctime)s :: %(levelname)6s :: '
                                '%(module)20s :: %(lineno)3d :: %(message)s')
 
-    # library creation from template
-    autocreate_library("library_template.json", delete_intermediate=True)
+    logger.info("Creating the library JSON from its template ...")
+    autocreate_library("library_template.json")
+    logger.info("...done")
 
-    # library checks
     logger.info("Checking the library JSON  ...")
     library_ok_list, _ = check_all("library.json")
     ok = all(list_element is True for list_element in library_ok_list)
