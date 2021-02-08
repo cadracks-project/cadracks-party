@@ -20,7 +20,8 @@
 
 r"""Unique geometry script generation logic from a JSON parts library file"""
 
-import imp
+# import imp
+import importlib.util
 import logging
 import json
 import codecs
@@ -94,7 +95,10 @@ def _generate_script(json_generators, scripts_folder, part_id, context_):
 def _generate_cad(output_folder, py_geometry_file, output_format):
     if output_format not in ["step", "stl", "html"]:
         raise ValueError
-    py_geometry_module = imp.load_source(py_geometry_file, py_geometry_file)
+    spec = importlib.util.spec_from_file_location(py_geometry_file, py_geometry_file)
+    py_geometry_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(py_geometry_module)
+    # py_geometry_module = imp.load_source(py_geometry_file, py_geometry_file)
     shape = py_geometry_module.__shape__
     part_id = splitext(basename(py_geometry_file))[0]
     part_id = str(part_id)  # Keeps the OCC STEP Writer happy !
