@@ -31,7 +31,7 @@ from __future__ import unicode_literals
 __name__ = "cadracks_party"
 __description__ = "API code for parts libraries"
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 __release__ = __version__
 __author__ = "Guillaume Florent, Thomas Paviot, Bernard Uguen"
 __author_email__ = "florentsailing@gmail.com"

@@ -20,7 +20,8 @@
 
 r"""Checks for scripts generated from a library.json"""
 
-import imp
+# import imp
+import importlib.util
 import os
 import json
 
@@ -52,7 +53,10 @@ def check_script(script_path):
 
     script_ok = True
     errors = list()
-    mod = imp.load_source(script_path, script_path)
+    spec = importlib.util.spec_from_file_location(script_path, script_path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    # mod = imp.load_source(script_path, script_path)
 
     # part variable checks
     if hasattr(mod, "part"):
